@@ -1,0 +1,6 @@
+
+<button class="login-button" *ngIf="!isAuthorized" (click)="login()" mat-button>Login</button>
+<button class="login-button" *ngIf="isAuthorized" (click)="logout()" mat-button>Logout</button>
+<h2>User Data</h2>
+<pre>{{userData | json}}</pre>
+<b><i>For more information check <a href="#DocLinkHere">Documentations</a> </i></b>

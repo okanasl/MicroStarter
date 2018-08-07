@@ -1,0 +1,103 @@
+﻿@using System.Globalization
+@using Host.Localization
+@using IdentityServer4.Entities
+@model LoginViewModel
+@inject SignInManager<ApplicationUser> SignInManager
+@inject LocService SharedLocalizer
+
+@inject Host.ClientSelector _clientSelector
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("login");
+    string LogoUri = Model.ClientImageUrl +"?width=100&height=100";
+}
+
+
+<div class="row">
+    <div class="col-xs-12 text-center">
+        @{      
+            if (string.IsNullOrEmpty(Model.ClientName))
+            {
+                <h3>@ViewData["Title"]</h3>
+            }
+            else
+            {
+                <img src="@LogoUri" alt="@Model.ClientName" />
+                <h3>Login for @Model.ClientName</h3>
+            }
+            
+        }
+    </div>
+    <div class="col-md-8">
+        <section>
+            <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">@SharedLocalizer.GetLocalizedHtmlString("email")</label>
+                    <div class="col-md-8">
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">@SharedLocalizer.GetLocalizedHtmlString("password")</label>
+                    <div class="col-md-8">
+                        <input asp-for="Password" class="form-control" type="password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-4 control-label">@SharedLocalizer.GetLocalizedHtmlString("rememberMe")</label>
+                    <div class="col-xs-8">
+                        <input asp-for="RememberLogin" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <button type="submit" class="btn btn-default">@SharedLocalizer.GetLocalizedHtmlString("login")</button>
+                    </div>
+                </div>
+                <p>
+                    <a asp-action="Register" asp-route-returnurl="@Model.ReturnUrl">@SharedLocalizer.GetLocalizedHtmlString("registerAsNewUser")</a>
+                </p>
+                <p>
+                    <a asp-action="ForgotPassword">@SharedLocalizer.GetLocalizedHtmlString("forgotYourPassword")</a>
+                </p>
+            </form>
+        </section>
+    </div>
+    <div class="col-md-4">
+         @if (Model.ExternalProviders.Any())
+        {
+            <div class="col-md-6 col-sm-6 external-providers">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">External Login</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form method="POST" action="/Account/ExternalLogin">
+                            <ul class="list-inline">                        
+                                @foreach (var provider in Model.ExternalProviders)
+                                {
+                                    <li>
+                                        <button class="btn btn-default"
+                                        type="submit"
+                                        value="@provider.AuthenticationScheme"
+                                        asp-route-provider="@provider.AuthenticationScheme"
+                                        asp-route-returnUrl="@Model.ReturnUrl">
+                                            @provider.DisplayName
+                                        </button>
+                                    </li>
+                                }
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -1,0 +1,8 @@
+node_modules/
+.git
+README.md
+*.suo
+*.user
+_ReSharper.*
+bin
+obj

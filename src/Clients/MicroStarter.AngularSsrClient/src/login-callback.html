@@ -1,0 +1,10 @@
+<script>
+    window.onload = function () {
+    /* The parent window hosts the Angular application */
+    var parent = window.opener;
+    /* Send the login information to the oidc message handler */
+    var event = new CustomEvent('login_callback_message', {detail: window.location.hash.substr(1) });
+    window.opener.dispatchEvent(event);
+    window.close();
+};
+</script> 

@@ -1,0 +1,54 @@
+networks:
+  localnet:
+    driver: bridge
+services:  
+  MicroStarterEventBus:
+    container_name: rabbitmqc
+    environment:
+      RABBITMQ_DEFAULT_PASS: machine
+      RABBITMQ_DEFAULT_USER: doom
+    healthcheck:
+      interval: 30s
+      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      timeout: 10s
+    image: rabbitmq:3-management-alpine
+    networks:
+    - localnet
+    ports:
+    - 15672:15672
+    - 5672:5672
+    - 5671:5671
+    volumes:
+    - rabbit-volume:/var/lib/rabbitmq
+  
+  my_redis:
+    build:
+      context: my_redis/
+      dockerfile: Dockerfile
+    container_name: my_redis
+    depends_on: []
+    image: my_redis
+    links: []
+    networks:
+    - localnet
+    ports:
+    - 6379:6379
+    restart: on-failure
+  postgre_name:
+    container_name: my_postgre_container
+    environment:
+      POSTGRES_DB: dev
+      POSTGRES_PASSWORD: machine
+      POSTGRES_USER: doom
+    image: postgres
+    networks:
+    - localnet
+    ports:
+    - 5432:5432
+    volumes:
+    - ./postgres-data:/var/lib/postgresql/data
+version: '3'
+volumes:
+  postgres-volume: {}
+  rabbit-volume: {}

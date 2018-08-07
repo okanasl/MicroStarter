@@ -1,0 +1,114 @@
+networks:
+  localnet:
+    driver: bridge
+services:
+  MicroStarter.AngularSsrClient:
+    build:
+      context: src/Clients/MicroStarter.AngularSsrClient
+      dockerfile: Dockerfile
+    image: microstarter.angularssrclient
+    networks:
+    - localnet
+    ports:
+    - 4200:4200
+  MicroStarter.Api:
+    build:
+      context: src/ApiServices/MicroStarter.Api/
+      dockerfile: Dockerfile
+    depends_on:
+    - postgre_name
+    - MicroStarterEventBus
+    image: microstarter.api
+    links:
+    - postgre_name
+    - MicroStarterEventBus
+    networks:
+    - localnet
+    ports:
+    - 8000:8000
+    restart: on-failure
+  MicroStarter.Identity:
+    build:
+      context: src/IdentityServices/MicroStarter.Identity/
+      dockerfile: Dockerfile
+    depends_on:
+    - postgre_name
+    - MicroStarterEventBus
+    image: microstarter.identity
+    links:
+    - postgre_name
+    - MicroStarterEventBus
+    networks:
+    - localnet
+    ports:
+    - 5000:5000
+    restart: on-failure
+  MicroStarterEventBus:
+    container_name: rabbitmqc
+    environment:
+      RABBITMQ_DEFAULT_PASS: machine
+      RABBITMQ_DEFAULT_USER: doom
+    healthcheck:
+      interval: 30s
+      retries: 5
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      timeout: 10s
+    image: rabbitmq:3-management-alpine
+    networks:
+    - localnet
+    ports:
+    - 15672:15672
+    - 5672:5672
+    - 5671:5671
+    volumes:
+    - rabbit-volume:/var/lib/rabbitmq
+  NginxServer:
+    build:
+      context: NginxServer/
+      dockerfile: Dockerfile
+    container_name: nginxserver
+    depends_on:
+    - MicroStarter.Api
+    - MicroStarter.AngularSsrClient
+    - MicroStarter.Identity
+    image: nginxhttp
+    links:
+    - MicroStarter.Api
+    - MicroStarter.AngularSsrClient
+    - MicroStarter.Identity
+    networks:
+    - localnet
+    ports:
+    - 80:80
+    - 443:443
+    restart: on-failure
+  my_redis:
+    build:
+      context: my_redis/
+      dockerfile: Dockerfile
+    container_name: my_redis
+    depends_on: []
+    image: my_redis
+    links: []
+    networks:
+    - localnet
+    ports:
+    - 6379:6379
+    restart: on-failure
+  postgre_name:
+    container_name: my_postgre_container
+    environment:
+      POSTGRES_DB: dev
+      POSTGRES_PASSWORD: machine
+      POSTGRES_USER: doom
+    image: postgres
+    networks:
+    - localnet
+    ports:
+    - 5432:5432
+    volumes:
+    - ./postgres-data:/var/lib/postgresql/data
+version: '3'
+volumes:
+  postgres-volume: {}
+  rabbit-volume: {}
