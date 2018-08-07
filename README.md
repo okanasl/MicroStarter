@@ -24,11 +24,13 @@ docker-compose -f docker-compose-tools.yml up
 cd ApiServices/MicroStarter.Api
 # Check your rabbitmq and postgresql username and password
 dotnet restore
+# Run Migrations
 dotnet run
 # IdentityServer4
 cd IdentityServices/MicroStarter.Identity
 # Check your rabbitmq and postgresql username and password
 dotnet restore
+# Run Migrations
 dotnet run /seed #seed data for is4 configuration
 # SSR Client
 cd Clients/MicroStarter.AngularSsrClient
