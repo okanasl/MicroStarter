@@ -1,4 +1,5 @@
-#Angular .Net Core IdentityServer Starter
+Angular .Net Core IdentityServer Starter
+---------------
 
 <b>IdentityServer4, .NET Core API, Angular Universal (SSR) Starter with cookie authentication, docker support(nginx configuration), redis support</b>
 
