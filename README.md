@@ -2,6 +2,7 @@ Angular .Net Core IdentityServer Starter
 ---------------
 
 <b>IdentityServer4, .NET Core API, Angular Universal (SSR) Starter with cookie authentication, docker, nginx and redis support</b>
+<p>Generated with <a href="https://github.com/DooMachine/MicroBoiler">MicroBoiler</a></p>
 
 Getting started
 ---------------
@@ -11,6 +12,7 @@ Getting started
 git clone git@github.com:DooMachine/MicroBoiler.git
 cd MicroBoiler
 
+# Set your ASPNETCORE_ENVIRONMENT environment to Development
 # Remove this git config
 rm -rf .git 
 # Start Your PostgreSql and Rabbitmq
@@ -32,6 +34,5 @@ dotnet run /seed #seed data for is4 configuration
 cd Clients/MicroStarter.AngularSsrClient
 npm install
 ng serve
-# Don't forget to Set your ASPNETCORE_ENVIRONMENT environment to Development
 
 
