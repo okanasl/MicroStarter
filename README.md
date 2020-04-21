@@ -1,6 +1,10 @@
 Angular .Net Core IdentityServer Starter
 ---------------
 
+## IMPORTANT 
+
+You should not use this code in production since implicit flow is depreciated. Check new PKCE flow.
+
 <b>IdentityServer4, .NET Core API, Angular Universal (SSR) Starter with cookie authentication, docker, nginx and redis support</b>
 <p>Generated with <a href="https://github.com/DooMachine/MicroBoiler">MicroBoiler</a></p>
 
