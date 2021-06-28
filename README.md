@@ -11,9 +11,9 @@ You should not use this code in production since implicit flow is depreciated. C
 Getting started
 ---------------
 
-```
+
 # Clone the repository
-git clone git@github.com:DooMachine/MicroBoiler.git
+git clone git@github.com:DooMachine/MicroStarter.git
 cd MicroBoiler
 
 # Set your ASPNETCORE_ENVIRONMENT environment to Development
